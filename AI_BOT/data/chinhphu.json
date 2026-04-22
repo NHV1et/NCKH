@@ -1,0 +1,119 @@
+[
+    {
+  "url": "https://chinhphu.vn",
+
+  "domain": "chinhphu.vn",
+  "tld": "vn",
+  "tld_suspicious": false,
+  "subdomain_depth": 1,
+  "has_ip": false,
+  "suspicious_chars": false,
+  "url_length": 20,
+  "suspicious_keywords": false,
+  "https": true,
+
+  "ssl_valid": true,
+  "ssl_days_left": 300,
+  "ssl_issuer": "GlobalSign nv-sa",
+
+  "domain_age_days": 5000,
+  "registrar": "VNNIC",
+  "whois_hidden": false,
+
+  "page_title": "Cổng Thông tin điện tử Chính phủ",
+  "has_contact": true,
+  "login_form": false,
+  "external_scripts": 3,
+  "iframe_count": 1,
+
+  "label": "REAL"
+}, 
+{
+  "url": "https://www.mic.gov.vn",
+
+  "domain": "mic.gov.vn",
+  "tld": "vn",
+  "tld_suspicious": false,
+  "subdomain_depth": 1,
+  "has_ip": false,
+  "suspicious_chars": false,
+  "url_length": 22,
+  "suspicious_keywords": false,
+  "https": true,
+
+  "ssl_valid": true,
+  "ssl_days_left": 250,
+  "ssl_issuer": "DigiCert Inc",
+
+  "domain_age_days": 4200,
+  "registrar": "VNNIC",
+  "whois_hidden": false,
+
+  "page_title": "Bộ Thông tin và Truyền thông",
+  "has_contact": true,
+  "login_form": false,
+  "external_scripts": 4,
+  "iframe_count": 1,
+
+  "label": "REAL"
+},
+{
+  "url": "https://www.mofa.gov.vn",
+
+  "domain": "mofa.gov.vn",
+  "tld": "vn",
+  "tld_suspicious": false,
+  "subdomain_depth": 1,
+  "has_ip": false,
+  "suspicious_chars": false,
+  "url_length": 23,
+  "suspicious_keywords": false,
+  "https": true,
+
+  "ssl_valid": true,
+  "ssl_days_left": 180,
+  "ssl_issuer": "GlobalSign nv-sa",
+
+  "domain_age_days": 4800,
+  "registrar": "VNNIC",
+  "whois_hidden": false,
+
+  "page_title": "Bộ Ngoại giao Việt Nam",
+  "has_contact": true,
+  "login_form": false,
+  "external_scripts": 5,
+  "iframe_count": 2,
+
+  "label": "REAL"
+},
+{
+  "url": "https://dichvucong.gov.vn",
+
+  "domain": "dichvucong.gov.vn",
+  "tld": "vn",
+  "tld_suspicious": false,
+  "subdomain_depth": 1,
+  "has_ip": false,
+  "suspicious_chars": false,
+  "url_length": 24,
+  "suspicious_keywords": false,
+  "https": true,
+
+  "ssl_valid": true,
+  "ssl_days_left": 210,
+  "ssl_issuer": "GlobalSign nv-sa",
+
+  "domain_age_days": 3500,
+  "registrar": "VNNIC",
+  "whois_hidden": false,
+
+  "page_title": "Cổng Dịch vụ công Quốc gia",
+  "has_contact": true,
+  "login_form": true,
+  "external_scripts": 6,
+  "iframe_count": 2,
+
+  "label": "REAL"
+}
+
+]

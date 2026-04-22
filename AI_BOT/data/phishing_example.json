@@ -1,0 +1,118 @@
+[
+    {
+  "url": "http://chinh-phu.vn.login-secure.xyz",
+
+  "domain": "login-secure.xyz",
+  "tld": "xyz",
+  "tld_suspicious": true,
+  "subdomain_depth": 3,
+  "has_ip": false,
+  "suspicious_chars": true,
+  "url_length": 38,
+  "suspicious_keywords": true,
+  "https": false,
+
+  "ssl_valid": false,
+  "ssl_days_left": 0,
+  "ssl_issuer": "",
+
+  "domain_age_days": 30,
+  "registrar": "Unknown",
+  "whois_hidden": true,
+
+  "page_title": "Đăng nhập Cổng Chính phủ",
+  "has_contact": false,
+  "login_form": true,
+  "external_scripts": 12,
+  "iframe_count": 4,
+
+  "label": "FAKE"
+},
+{
+  "url": "http://103.21.45.12/chinhphu/login",
+
+  "domain": "103.21.45.12",
+  "tld": "",
+  "tld_suspicious": true,
+  "subdomain_depth": 0,
+  "has_ip": true,
+  "suspicious_chars": false,
+  "url_length": 32,
+  "suspicious_keywords": true,
+  "https": false,
+
+  "ssl_valid": false,
+  "ssl_days_left": 0,
+  "ssl_issuer": "",
+
+  "domain_age_days": 5,
+  "registrar": "Unknown",
+  "whois_hidden": true,
+
+  "page_title": "Government Portal Login",
+  "has_contact": false,
+  "login_form": true,
+  "external_scripts": 8,
+  "iframe_count": 2,
+
+  "label": "FAKE"
+},
+{
+  "url": "https://chinhphu-gov.vn.secure-login.top",
+
+  "domain": "secure-login.top",
+  "tld": "top",
+  "tld_suspicious": true,
+  "subdomain_depth": 2,
+  "has_ip": false,
+  "suspicious_chars": true,
+  "url_length": 41,
+  "suspicious_keywords": true,
+  "https": true,
+
+  "ssl_valid": true,
+  "ssl_days_left": 15,
+  "ssl_issuer": "Let's Encrypt",
+
+  "domain_age_days": 20,
+  "registrar": "NameCheap",
+  "whois_hidden": true,
+
+  "page_title": "Cổng thông tin Chính phủ",
+  "has_contact": false,
+  "login_form": true,
+  "external_scripts": 15,
+  "iframe_count": 5,
+
+  "label": "FAKE"
+},
+{
+  "url": "https://dichvucong-gov.vn.verify-account.click",
+
+  "domain": "verify-account.click",
+  "tld": "click",
+  "tld_suspicious": true,
+  "subdomain_depth": 2,
+  "has_ip": false,
+  "suspicious_chars": true,
+  "url_length": 45,
+  "suspicious_keywords": true,
+  "https": true,
+
+  "ssl_valid": true,
+  "ssl_days_left": 10,
+  "ssl_issuer": "Let's Encrypt",
+
+  "domain_age_days": 12,
+  "registrar": "Unknown",
+  "whois_hidden": true,
+
+  "page_title": "Xác minh tài khoản Dịch vụ công",
+  "has_contact": false,
+  "login_form": true,
+  "external_scripts": 20,
+  "iframe_count": 6,
+
+  "label": "FAKE"
+}
+]
