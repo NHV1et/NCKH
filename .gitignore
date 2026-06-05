@@ -1,1 +1,14 @@
-Data/
+# Ignore toàn bộ dữ liệu trong Data
+Data/*
+
+# Nhưng giữ lại structure folder
+!Data/Text_Info/
+!Data/Image_Info/
+
+# Ignore everything bên trong 2 folder đó
+Data/Text_Info/*
+Data/Image_Info/*
+
+# Nhưng vẫn giữ folder rỗng
+!Data/Text_Info/.gitkeep
+!Data/Image_Info/.gitkeep
