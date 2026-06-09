@@ -10,6 +10,10 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 
 class Image_Scrapper():
+
+    def __init__(self):
+        self.driver = None
+        self.saved_image_folder = None
      
     def _setup_driver(self):
 
