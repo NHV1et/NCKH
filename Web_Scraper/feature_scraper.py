@@ -19,58 +19,62 @@ shortening_services = r"bit\.ly|goo\.gl|shorte\.st|go2l\.ink|x\.co|ow\.ly|t\.co|
 
 class FeatureExtractor:
     def __init__(self):
-        self.features = []
+        self.features = dict()
 
-    def add_feature(self, key, value):
-        self.features.append({key: value})
+    # def add_feature(self, key, value):
+    #     self.features[key] = value
 
-    def _safe_run(self, method_name, url):
-        try:
-            getattr(self, method_name)(url)
-        except Exception as exc:
-            self.add_feature(method_name, f"Error: {exc}")
+    # def _safe_run(self, method_name, url):
+    #     try:
+    #         getattr(self, method_name)(url)
+    #     except Exception as exc:
+    #         self.add_feature(method_name, f"Error: {exc}")
     
-    def check_result(self):
-        print(self.features)
+    # def check_result(self):
+    #     print(self.features)
 
-    def run_parallel_checks(self, url):
-        self.features = []
-        check_methods = [
-            "has_ip",
-            "have_sus_sign",
-            "has_prefix",
-            "has_signature",
-            "has_icon",
-            "get_length",
-            "redirection",
-            "httpDomain",
-            "tinyURL",
-            "has_index",
-        ]
+    # def run_parallel_checks(self, url):
+    #     self.features = dict()
+    #     check_methods = [
+    #         "has_ip",
+    #         "have_sus_sign",
+    #         "has_prefix",
+    #         "has_signature",
+    #         "has_icon",
+    #         "get_length",
+    #         "redirection",
+    #         "httpDomain",
+    #         "tinyURL",
+    #         "has_index",
+    #     ]
 
-        with ThreadPoolExecutor(max_workers=min(8, len(check_methods))) as executor:
-            futures = [executor.submit(self._safe_run, method_name, url) for method_name in check_methods]
-            for future in futures:
-                future.result()
+    #     with ThreadPoolExecutor(max_workers=min(8, len(check_methods))) as executor:
+    #         futures = [executor.submit(self._safe_run, method_name, url) for method_name in check_methods]
+    #         for future in futures:
+    #             future.result()
 
-        return self.features
+    #     return self.features
 
     def has_ip(self, url):
         try:
             ipaddress.ip_address(url)
-            self.add_feature("Have_IP", 0)
+            # self.add_feature("Have_IP", 0)
+            return 0
         except ValueError:
-            self.add_feature("Have_IP", 1)
+            # self.add_feature("Have_IP", 1)
+            return 1
     
     def have_sus_sign(self, url):
-        self.add_feature(
-            "has_@",
-            0 if "@" in url else 1
-        )
+        # self.add_feature(
+        #     "has_@",
+        #     0 if "@" in url else 1
+        # )
+        return 0 if "@" in url else 1
 
     def has_prefix(self, url):
-        has_dash = 0 if '-' in urlparse(url).netloc else 1
-        self.add_feature("has_-", has_dash)
+        # has_dash = 0 if '-' in urlparse(url).netloc else 1
+        # self.add_feature("has_-", has_dash)
+        return 0 if '-' in urlparse(url).netloc else 1
 
     def has_signature(self, url):
         domain = urlparse(url).hostname
@@ -85,9 +89,11 @@ class FeatureExtractor:
             or domain == "gov.vn"
             or domain.endswith(".gov")
             or domain.endswith(".vn")):
-            self.add_feature("has_signature",1)
+            # self.add_feature("has_signature",1)
+            return 1
         else:
-            self.add_feature("has_signature",0)
+            # self.add_feature("has_signature",0)
+            return 0
 
     def has_icon(self, url):
         try:
@@ -100,44 +106,52 @@ class FeatureExtractor:
             )
 
             if icon:
-                self.add_feature('has_icon',1)
+                # self.add_feature('has_icon',1)
+                return 1
             else:
-                self.add_feature('has_icon',0)
+                # self.add_feature('has_icon',0)
+                return 0
         except:
             print('Hàm check icon bị lỗi, kiểm tra lại')
-            self.add_feature("has_icon","Error")   
+            return   
     
-    # Placeholder cho index
-
     def get_length(self, url):
-        self.add_feature(
-            "long_url",
-            1 if len(url) <= 40 else 0
-        )
+        # self.add_feature(
+        #     "long_url",
+        #     1 if len(url) <= 40 else 0
+        # )
+        return 1 if len(url) <= 40 else 0
     
     def redirection(self,url):
         pos = url.rfind('//')
         if pos > 6:
             if pos > 7:
-                self.add_feature("url_has_//",0) 
+                # self.add_feature("url_has_//",0)
+                return 0 
             else:
-                self.add_feature("url_has_//",1) 
+                # self.add_feature("url_has_//",1) 
+                return 1
         else:
-            self.add_feature("url_has_//",1) 
+            # self.add_feature("url_has_//",1) 
+            return 1
     
     def httpDomain(self,url):
         domain = urlparse(url).netloc
         if 'https' in domain:
-            self.add_feature("domain_has_https",0)
+            # self.add_feature("domain_has_https",0)
+            return 0
         else:
-            self.add_feature("domain_has_https",1)
+            # self.add_feature("domain_has_https",1)
+            return 1
     
     def tinyURL(self,url):
         match=re.search(shortening_services,url)
         if match:
-            self.add_feature("shortcut_url",0)
+            # self.add_feature("shortcut_url",0)
+            return 0
         else:
-            self.add_feature("shortcut_url",1)
+            # self.add_feature("shortcut_url",1)
+            return 1
 
     def has_index(self, url):
         try:
@@ -162,16 +176,18 @@ class FeatureExtractor:
                 if any(
                     keyword in content
                     for keyword in not_indexed_keywords):
-                    self.add_feature("indexed",0)
+                    # self.add_feature("indexed",0)
+                    return 0
                 else:
-                    self.add_feature("indexed",1)
+                    # self.add_feature("indexed",1)
+                    return 1
         except:
-            self.add_feature("indexed","Error")
-
+            print("Lỗi tại hàm check index!")
+            return
 
     
 if __name__ == "__main__":
     feature_extractor = FeatureExtractor()
-    feature_extractor.run_parallel_checks('https://chinhphu.vn/')
+    feature_extractor.run_parallel_checks('https://moet.gov.vn/')
     feature_extractor.check_result()
 
