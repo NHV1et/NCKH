@@ -1,12 +1,3 @@
-# Giả sử là bên main khởi động selenium driver 
-# Lên rồi, giờ code thuần trong giả định đấy thôi #
-
-# import requests
-# from selenium.common.exceptions import NoSuchElementException
-
-# from datetime import datetime
-# import os
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
