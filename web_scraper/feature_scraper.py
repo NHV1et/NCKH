@@ -3,6 +3,7 @@ from datetime import datetime
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from web_scraper.text_scraper import TextScraper
 import ipaddress
 import subprocess
 import re
@@ -228,17 +229,19 @@ class FeatureScraper:
    
     def sus_port(self):
         try:
-            command=['nmap','-sV','--top-ports','100','--open','-T4','--script=banner',self.domain]      
+            #command=['nmap','-sV','--top-ports','100','--open','-T4','--script=banner',self.domain] detailed port info ->Lâu (41s)
+            #Tối ưu bằng cách chỉ lấy danh sách port mở (5s)
+            command=['nmap','--top-ports','100','--open','-T4',self.domain]     
             result = subprocess.run(command, capture_output=True, text=True)
             if result.stdout:
                 ports=[]
                 for line in result.stdout.splitlines():
-                    m = re.match(r'\s*(\d+)/(\w+)\s+open\s+(.+)', line)
+                    m = re.match(r'\s*(\d+)/\w+\s+open\s+.+', line)
                     if m:
-                        port, proto, service = m.groups()
-                        ports.append({"Port": port, "Proto": proto, "Service": service.strip()})
+                        port = m.group(1)
+                        ports.append(port)
                 common_ports = ['21', '22', '23', '25', '53', '80', '110', '143', '443', '445', '3389']
-                sus_ports = [port for port in ports if port['Port'] not in common_ports]
+                sus_ports = [port for port in ports if port not in common_ports]
                 if len(sus_ports) > 0:
                     return 1
                 else:
@@ -292,11 +295,6 @@ class FeatureScraper:
                         return 0
         except (socket.error, ssl.SSLError, ConnectionError) as e:
             return 0
-    def has_iframe(self):
-        if '<iframe>' in self.response.text:
-            return 1
-        else:
-            return 0
     def disabled_right_click(self):
         if 'oncontextmenu="return false"' in self.response.text:
             return 1
@@ -312,8 +310,12 @@ class FeatureScraper:
             return 1
         else:
             return 0
-    def url_anchor(self):
-        if '<a href=“#”>' in self.response.text:
+    def abnormal_url_anchor(self):
+        soup = BeautifulSoup(self.response.text, "html.parser")
+        all_tags = soup.find_all("a")
+        hash_anchors = soup.find_all("a", href="#")
+        percentage = (len(hash_anchors) / len(all_tags)) * 100 if all_tags else 0
+        if percentage > 60:
             return 1
         else:
             return 0

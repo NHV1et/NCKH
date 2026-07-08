@@ -133,9 +133,15 @@ class TextScraper:
         #     "site_id":     None,
         #     "tracker_url": None,
         # }
- 
-    def scanning(self,domain):
+    def check_iframe_hidden(self):
+        iframes = self.driver.find_elements(By.TAG_NAME, 'iframe')
+        for iframe in iframes:
+            if not iframe.is_displayed():
+                return 1
+        return 0
+    def scanning(self,report:dict,domain):
         if not self.driver:
             self.driver=self.initDriver()
         self.driver.get(self.normalize_url(domain))
-        return self.check_emc_tracking()
+        report['has_emc'] = self.check_emc_tracking()
+        report['has_iframe_hidden'] = self.check_iframe_hidden()
