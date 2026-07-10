@@ -139,9 +139,12 @@ class TextScraper:
             if not iframe.is_displayed():
                 return 1
         return 0
-    def scanning(self,report:dict,domain):
+    def scanning(self,report:dict,domain,surface=False,deep=False):
         if not self.driver:
             self.driver=self.initDriver()
         self.driver.get(self.normalize_url(domain))
-        report['has_emc'] = self.check_emc_tracking()
-        report['has_iframe_hidden'] = self.check_iframe_hidden()
+        if surface:
+            report['has_emc'] = self.check_emc_tracking()
+            report['has_iframe_hidden'] = self.check_iframe_hidden()
+        if deep:
+            report['Text'] = self.get_text()

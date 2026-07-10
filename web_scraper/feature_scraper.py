@@ -70,7 +70,8 @@ class FeatureScraper:
             print(f"Error retrieving SSL info for {self.domain}: {e}")
     def get_port_info(self):
         try:
-            command=['nmap','-sV','--top-ports','100','--open','-T4','--script=banner',self.domain]      
+            #command=['nmap','-sV','--top-ports','100','--open','-T4','--script=banner',self.domain] 
+            command=['nmap','--top-ports','100','--open','-T4',self.domain] #Bỏ qua version, tập trung vào port proto service      
             result = subprocess.run(command, capture_output=True, text=True)
             if result.stdout:
                 ports=[]
@@ -170,13 +171,10 @@ class FeatureScraper:
         pos = url.rfind('//')
         if pos > 6:
             if pos > 7:
-                # self.add_feature("url_has_//",0)
                 return 1 
             else:
-                # self.add_feature("url_has_//",1) 
                 return 0
         else:
-            # self.add_feature("url_has_//",1) 
             return 0
     
     def httpDomain(self):

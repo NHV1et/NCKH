@@ -49,6 +49,7 @@ class NucleiScraper:
     def scrape_vuln(self):
       try:
         # ssl, http/misconfiguration, http/vulnerabilities, dns, default-logins, http/exposures, cves
+        #whatweb, pentest
         command = [
             'nuclei',
             '-u', self.url,

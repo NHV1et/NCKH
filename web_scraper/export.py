@@ -13,7 +13,7 @@ class Export:
         self.saved_file=f'scrap_{domain}_{now}'
     def get_Text(self):     
         text_scraper = TextScraper()
-        self.report['Text'] = text_scraper.scanning(self.domain)
+        text_scraper.scanning(self.report, domain=self.domain,surface=False,deep=True)
     def get_img(self):
         image_scraper = ImageScraper()
         self.report['Images'] = image_scraper.scanning(self.domain,self.saved_file)
@@ -25,7 +25,7 @@ class Export:
         feature_scraper.scanning(self.report,scan_domain=domain,scan_ssl=ssl,scan_port=port,scan_dns=dns)
     def get_deep_features(self,tech=True,vuln=True,domain=True,ssl=True,port=True,dns=True):
         self.get_Text()
-        self.get_img()
+        #self.get_img()
         self.get_feature_info(domain=domain,ssl=ssl,port=port,dns=dns)        
         self.get_nuclei_info(tech=tech,vuln=vuln)
     def get_surface_features(self):
@@ -37,7 +37,7 @@ class Export:
         self.report['has_signature'] = feature_scraper.has_signature()
         self.report['has_icon'] = feature_scraper.has_icon()
         self.report['long_url'] = feature_scraper.get_length()
-        self.report['domain_has_//'] = feature_scraper.redirection()
+        #self.report['domain_has_//'] = feature_scraper.redirection()
         self.report['domain_has_https'] = feature_scraper.httpDomain()
         self.report['shortcut_url'] = feature_scraper.tinyURL()
         self.report['has_index'] = feature_scraper.has_index()
@@ -52,7 +52,7 @@ class Export:
         self.report['on_mouse_over'] = feature_scraper.on_mouse_over()
         self.report['multi_web_forward'] = feature_scraper.web_forward()
         self.report['abnormal_url_anchor'] = feature_scraper.abnormal_url_anchor()
-        text_scraper.scanning(self.report,self.domain)
+        text_scraper.scanning(self.report,self.domain,surface=True,deep=False)
         #self.report['has_emc_tracking'] = text_scraper.scanning(self.domain)
         self.report['has_nca'] = feature_scraper.has_nca()
     def print_report(self):
