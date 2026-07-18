@@ -1,0 +1,53 @@
+{
+  "technologies": [
+    {
+      "template-id": "microsoft-iis-version",
+      "description": "Some Microsoft IIS servers have the version on the response header. Useful when you need to find specific CVEs on your targets.",
+      "extracted-results": [
+        "Microsoft-IIS/10.0"
+      ]
+    },
+    {
+      "template-id": "waf-detect",
+      "description": "A web application firewall was detected.",
+      "matcher-name": "aspgeneric"
+    },
+    {
+      "template-id": "metatag-cms",
+      "description": "Generic CMS Detection using html meta generator tag",
+      "extracted-results": [
+        "Microsoft SharePoint"
+      ]
+    },
+    {
+      "template-id": "tech-detect",
+      "description": null,
+      "matcher-name": "owl-carousel"
+    },
+    {
+      "template-id": "tech-detect",
+      "description": null,
+      "matcher-name": "font-awesome"
+    },
+    {
+      "template-id": "tech-detect",
+      "description": null,
+      "matcher-name": "bootstrap"
+    },
+    {
+      "template-id": "tech-detect",
+      "description": null,
+      "matcher-name": "ms-iis"
+    },
+    {
+      "template-id": "tech-detect",
+      "description": null,
+      "matcher-name": "microsoft-asp.net"
+    },
+    {
+      "template-id": "tech-detect",
+      "description": null,
+      "matcher-name": "slick"
+    }
+  ]
+}

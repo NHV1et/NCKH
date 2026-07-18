@@ -1,0 +1,192 @@
+{
+  "Vulnerabilities": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    {
+      "template": "ssl/weak-cipher-suites.yaml",
+      "template-url": "https://cloud.projectdiscovery.io/public/weak-cipher-suites",
+      "template-id": "weak-cipher-suites",
+      "template-path": "/home/tom/.local/nuclei-templates/ssl/weak-cipher-suites.yaml",
+      "info": {
+        "name": "Weak Cipher Suites Detection",
+        "author": [
+          "pussycat0x"
+        ],
+        "tags": [
+          "ssl",
+          "tls",
+          "misconfig",
+          "vuln"
+        ],
+        "description": "A weak cipher is defined as an encryption/decryption algorithm that uses a key of insufficient length. Using an insufficient length for a key in an encryption/decryption algorithm opens up the possibility (or probability) that the encryption scheme could be broken.",
+        "reference": [
+          "https://www.acunetix.com/vulnerabilities/web/tls-ssl-weak-cipher-suites/",
+          "http://ciphersuite.info"
+        ],
+        "severity": "low",
+        "metadata": {
+          "max-request": 4
+        }
+      },
+      "matcher-name": "tls-1.1",
+      "type": "ssl",
+      "host": "mae.gov.vn",
+      "port": "443",
+      "matched-at": "mae.gov.vn:443",
+      "extracted-results": [
+        "[tls11 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]"
+      ],
+      "ip": "103.9.86.150",
+      "timestamp": "2026-06-12T15:30:19.467785699+07:00",
+      "matcher-status": true
+    },
+    null,
+    null,
+    {
+      "template": "http/exposures/backups/zip-backup-files.yaml",
+      "template-url": "https://cloud.projectdiscovery.io/public/zip-backup-files",
+      "template-id": "zip-backup-files",
+      "template-path": "/home/tom/.local/nuclei-templates/http/exposures/backups/zip-backup-files.yaml",
+      "info": {
+        "name": "Compressed Backup File - Detect",
+        "author": [
+          "toufik-airane",
+          "dwisiswant0",
+          "ffffffff0x",
+          "pwnhxl",
+          "mastercho"
+        ],
+        "tags": [
+          "exposure",
+          "backup",
+          "vuln"
+        ],
+        "description": "Multiple compressed backup files were detected.",
+        "severity": "medium",
+        "metadata": {
+          "max-request": 1305
+        },
+        "classification": {
+          "cve-id": null,
+          "cwe-id": [
+            "cwe-200"
+          ],
+          "cvss-metrics": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+          "cvss-score": 5.3
+        }
+      },
+      "type": "http",
+      "host": "mae.gov.vn",
+      "port": "443",
+      "scheme": "https",
+      "url": "https://mae.gov.vn",
+      "matched-at": "https://mae.gov.vn/bin.rar",
+      "request": "GET /bin.rar HTTP/1.1\r\nHost: mae.gov.vn\r\nUser-Agent: Mozilla/5.0 (X11; Linux i686; rv:1.9.7.20) Gecko/ Firefox/3.6.10\r\nAccept: */*\r\nAccept-Language: en\r\nAccept-Encoding: gzip\r\n\r\n",
+      "response": "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Length: 66358274\r\nAccept-Ranges: bytes\r\nAccess-Control-Allow-Headers: Content-Type, Authorization\r\nAccess-Control-Allow-Methods: POST\r\nAccess-Control-Allow-Origin: *\r\nContent-Security-Policy: frame-ancestors 'self' teams.microsoft.com *.teams.microsoft.com *.skype.com *.teams.microsoft.us local.teams.office.com *.powerapps.com *.yammer.com *.officeapps.live.com *.office.com *.stream.azure-test.net *.microsoftstream.com *.dynamics.com *.microsoft.com onedrive.live.com *.onedrive.live.com;\r\nContent-Security-Policy: default-src 'self' https://demo-media-monre.monre.gov.vn https://media.mae.gov.vn; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.youtube.com https://*.ungdungtructuyen.vn https://f-emc.ngsp.gov.vn 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://*.ungdungtructuyen.vn https://f-emc.ngsp.gov.vn https://*.mae.gov.vn https://api.waqi.info; font-src * data:; img-src * data:; frame-src 'self' https://*.google.com/ https://*.monre.gov.vn https://www.youtube.com https://media.mae.gov.vn;\r\nContent-Type: application/octet-stream\r\nDate: Fri, 12 Jun 2026 08:30:20 GMT\r\nEtag: \"8ada283045b0dc1:0\"\r\nLast-Modified: Tue, 10 Mar 2026 04:20:12 GMT\r\nRequest-Id: 0fd21ca2-fe4e-d0e4-2a38-f0db2fa9abab\r\nServer: Microsoft-IIS/10.0\r\nSpiislatency: 1\r\nSprequestduration: 3\r\nSprequestguid: 0fd21ca2-fe4e-d0e4-2a38-f0db2fa9abab\r\nStrict-Transport-Security: max-age=31536000; includeSubDomains\r\nX-Content-Type-Options: nosniff\r\nX-Frame-Options: SAMEORIGIN\r\nX-Ms-Invokeapp: 1; RequireReadOnly\r\nX-Sharepointhealthscore: 0\r\n\r\nRar!\u001a\u0007\u0001\u0000T���\u0010\u0001\u0005\f\u0000\u000b\u0001\u0001ˬџ����\u0000\u0015L�j<\u0002\u0003\u000b��̀\u0000\u0004��ς\u0000 ���.�C\u0000\u001abin/AjaxControlToolkit.dll\n\u0003\u0002��Y\r\u0018��\u0001��`Wp\u0006DDB$�`Hw������e�\u000b��\u0006\b\u00184��`\u0018\b����\u0011\u0001\u0015\u0010x\b��\n��`�a���+�k�G�����xk�WW]u]xc�-x\u000fmw]xo\u0007��?*&�\"&j��3\u0007]���~|���\f�������\u0013ʦk?\u0015���y�DO�1Uw���?�o�'>�\u0003�Ϡ����\u0004wϕ��|\u001f�N�Oc�S�����g|�$>8\u001c�z~\u0003�i�9�'��q|N�@΋\u0001�q�\u0006�z\f\u0006x��S��r,�8�Jjh�7\fy]�#$�P\u001e���f�;���8\b��ȏ[�n N���|\u0000\u001e\u0005\u0006�\te&���\"�p)\u000f��z\u0010'\\2eG��j,P_��\t�(�&�\r�\u00190\u0002\u001eE\u0001��\"O}}���\u0002�t�\u0010��`��.3��\u001c+��\u0015�5�y1f�\u001a��\u0016i�\u0017#��\u0007��(����ğ��\u0019\"�\u000e&i5��[�>��\u001f]\t4l^P�|\u0015�����9�\u0015��Q�w�\u001b��ȣ���",
+      "meta": {
+        "EXT": "rar",
+        "FILENAME": "bin"
+      },
+      "ip": "103.9.86.150",
+      "timestamp": "2026-06-12T15:30:20.864085102+07:00",
+      "curl-command": "curl -X 'GET' -d '' -H 'Accept: */*' -H 'Accept-Language: en' -H 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:1.9.7.20) Gecko/ Firefox/3.6.10' 'https://mae.gov.vn/bin.rar'",
+      "matcher-status": true
+    },
+    {
+      "template": "http/misconfiguration/microsoft/ms-front-page-misconfig.yaml",
+      "template-url": "https://cloud.projectdiscovery.io/public/ms-front-page-misconfig",
+      "template-id": "ms-front-page-misconfig",
+      "template-path": "/home/tom/.local/nuclei-templates/http/misconfiguration/microsoft/ms-front-page-misconfig.yaml",
+      "info": {
+        "name": "Microsoft FrontPage Configuration - Exposure",
+        "author": [
+          "jteles",
+          "pikpikcu"
+        ],
+        "tags": [
+          "misconfig",
+          "exposure",
+          "frontpage",
+          "microsoft",
+          "vuln"
+        ],
+        "description": "Microsoft FrontPage Server Extensions configuration files were accessible, exposing version details, directory paths, and other configurations. This was a common misconfiguration on old (2000s) IIS servers with FrontPage Server Extensions installed.\n",
+        "reference": [
+          "https://docs.microsoft.com/en-us/archive/blogs/fabdulwahab/security-protecting-sharepoint-server-applications",
+          "https://www.tenable.com/plugins/was/112772",
+          "https://stackoverflow.com/questions/1163820/what-are-vti-cnf-vti-pvt-vti-script-and-vti-txt-folders"
+        ],
+        "severity": "low",
+        "metadata": {
+          "max-request": 2,
+          "verified": true
+        }
+      },
+      "type": "http",
+      "host": "mae.gov.vn",
+      "port": "443",
+      "scheme": "https",
+      "url": "https://mae.gov.vn",
+      "matched-at": "https://mae.gov.vn/_vti_pvt/service.cnf",
+      "request": "GET /_vti_pvt/service.cnf HTTP/1.1\r\nHost: mae.gov.vn\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:109.0) Gecko/20100101 Firefox/113.0\r\nConnection: close\r\nAccept: */*\r\nAccept-Language: en\r\nAccept-Encoding: gzip\r\n\r\n",
+      "response": "HTTP/1.1 200 OK\r\nConnection: close\r\nAccept-Ranges: bytes\r\nAccess-Control-Allow-Headers: Content-Type, Authorization\r\nAccess-Control-Allow-Methods: POST\r\nAccess-Control-Allow-Origin: *\r\nContent-Security-Policy: frame-ancestors 'self' teams.microsoft.com *.teams.microsoft.com *.skype.com *.teams.microsoft.us local.teams.office.com *.powerapps.com *.yammer.com *.officeapps.live.com *.office.com *.stream.azure-test.net *.microsoftstream.com *.dynamics.com *.microsoft.com onedrive.live.com *.onedrive.live.com;\r\nContent-Security-Policy: default-src 'self' https://demo-media-monre.monre.gov.vn https://media.mae.gov.vn; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.youtube.com https://*.ungdungtructuyen.vn https://f-emc.ngsp.gov.vn 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://*.ungdungtructuyen.vn https://f-emc.ngsp.gov.vn https://*.mae.gov.vn https://api.waqi.info; font-src * data:; img-src * data:; frame-src 'self' https://*.google.com/ https://*.monre.gov.vn https://www.youtube.com https://media.mae.gov.vn;\r\nContent-Type: text/plain\r\nDate: Fri, 12 Jun 2026 08:30:32 GMT\r\nEtag: \"e68a325918c2da1:0\"\r\nLast-Modified: Wed, 19 Jun 2024 07:14:39 GMT\r\nRequest-Id: 12d21ca2-be47-d0e4-2a38-feee05c87bb4\r\nServer: Microsoft-IIS/10.0\r\nSpiislatency: 1\r\nSprequestduration: 3\r\nSprequestguid: 12d21ca2-be47-d0e4-2a38-feee05c87bb4\r\nStrict-Transport-Security: max-age=31536000; includeSubDomains\r\nVary: Accept-Encoding\r\nX-Content-Type-Options: nosniff\r\nX-Frame-Options: SAMEORIGIN\r\nX-Ms-Invokeapp: 1; RequireReadOnly\r\nX-Sharepointhealthscore: 0\r\n\r\nvti_encoding:SR|utf8-nl\r\nvti_extenderversion:SR|16.0.0.10395\r\n\r\n",
+      "ip": "103.9.86.150",
+      "timestamp": "2026-06-12T15:30:33.039767354+07:00",
+      "curl-command": "curl -X 'GET' -d '' -H 'Accept: */*' -H 'Accept-Language: en' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:109.0) Gecko/20100101 Firefox/113.0' 'https://mae.gov.vn/_vti_pvt/service.cnf'",
+      "matcher-status": true
+    },
+    {
+      "template": "http/exposures/logs/trace-axd-expose.yaml",
+      "template-url": "https://cloud.projectdiscovery.io/public/trace-axd-expose",
+      "template-id": "trace-axd-expose",
+      "template-path": "/home/tom/.local/nuclei-templates/http/exposures/logs/trace-axd-expose.yaml",
+      "info": {
+        "name": "ASP.NET Trace.AXD - Exposure",
+        "author": [
+          "dhiyaneshdk"
+        ],
+        "tags": [
+          "logs",
+          "asp",
+          "exposure",
+          "discovery"
+        ],
+        "description": "ASP.NET Trace.AXD information was exposed.",
+        "reference": [
+          "https://www.rapid7.com/db/vulnerabilities/spider-asp-dot-net-trace-axd/"
+        ],
+        "severity": "low",
+        "metadata": {
+          "max-request": 1
+        }
+      },
+      "type": "http",
+      "host": "mae.gov.vn",
+      "port": "443",
+      "scheme": "https",
+      "url": "https://mae.gov.vn",
+      "matched-at": "https://mae.gov.vn/Trace.axd",
+      "request": "GET /Trace.axd HTTP/1.1\r\nHost: mae.gov.vn\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Mobile/15E148 Safari/604.1\r\nConnection: close\r\nAccept: */*\r\nAccept-Language: en\r\nAccept-Encoding: gzip\r\n\r\n",
+      "response": "HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 2500\r\nAccess-Control-Allow-Headers: Content-Type, Authorization\r\nAccess-Control-Allow-Methods: POST\r\nAccess-Control-Allow-Origin: *\r\nCache-Control: private\r\nContent-Security-Policy: frame-ancestors 'self' teams.microsoft.com *.teams.microsoft.com *.skype.com *.teams.microsoft.us local.teams.office.com *.powerapps.com *.yammer.com *.officeapps.live.com *.office.com *.stream.azure-test.net *.microsoftstream.com *.dynamics.com *.microsoft.com onedrive.live.com *.onedrive.live.com;\r\nContent-Security-Policy: default-src 'self' https://demo-media-monre.monre.gov.vn https://media.mae.gov.vn; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.youtube.com https://*.ungdungtructuyen.vn https://f-emc.ngsp.gov.vn 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://*.ungdungtructuyen.vn https://f-emc.ngsp.gov.vn https://*.mae.gov.vn https://api.waqi.info; font-src * data:; img-src * data:; frame-src 'self' https://*.google.com/ https://*.monre.gov.vn https://www.youtube.com https://media.mae.gov.vn;\r\nContent-Type: text/html; charset=utf-8\r\nDate: Fri, 12 Jun 2026 08:30:34 GMT\r\nRequest-Id: 12d21ca2-cec1-d0e4-2a38-f5d0b2ae6c38\r\nServer: Microsoft-IIS/10.0\r\nSpiislatency: 0\r\nSprequestduration: 16\r\nSprequestguid: 12d21ca2-cec1-d0e4-2a38-f5d0b2ae6c38\r\nStrict-Transport-Security: max-age=31536000; includeSubDomains\r\nX-Content-Type-Options: nosniff\r\nX-Frame-Options: SAMEORIGIN\r\nX-Ms-Invokeapp: 1; RequireReadOnly\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>Trace Error</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:black;margin-top: -5px}\r\n         H1 { font-family:\"Verdana\";font-weight:normal;font-size:18pt;color:red }\r\n         H2 { font-family:\"Verdana\";font-weight:normal;font-size:14pt;color:maroon }\r\n         pre {font-family:\"Consolas\",\"Lucida Console\",Monospace;font-size:11pt;margin:0;padding:0.5em;line-height:14pt}\r\n         .marker {font-weight: bold; color: black;text-decoration: none;}\r\n         .version {color: gray;}\r\n         .error {margin-bottom: 10px;}\r\n         .expandable { text-decoration:underline; font-weight:bold; color:navy; cursor:pointer; }\r\n         @media screen and (max-width: 639px) {\r\n          pre { width: 440px; overflow: auto; white-space: pre-wrap; word-wrap: break-word; }\r\n         }\r\n         @media screen and (max-width: 479px) {\r\n          pre { width: 280px; }\r\n         }\r\n        </style>\r\n    </head>\r\n\r\n    <body bgcolor=\"white\">\r\n\r\n            <span><H1>Server Error in '/' Application.<hr width=100% size=1 color=silver></H1>\r\n\r\n            <h2> <i>Trace Error</i> </h2></span>\r\n\r\n            <font face=\"Arial, Helvetica, Geneva, SunSans-Regular, sans-serif \">\r\n\r\n            <b> Description: </b>The current trace settings prevent trace.axd from being viewed remotely (for security reasons).  It could, however, be viewed by browsers running on the local server machine.\r\n            <br><br>\r\n\r\n            <b>Details:</b> To enable trace.axd to be viewable on remote machines, please create a &lt;trace&gt; tag within the configuration file located in the root directory of the current web application. This &lt;trace&gt; tag should then have its &quot;localOnly&quot; attribute set to &quot;false&quot;.<br><br>\r\n\r\n            <table width=100% bgcolor=\"#ffffcc\">\r\n               <tr>\r\n                  <td>\r\n                      <code><pre>\r\n\r\n&lt;configuration&gt;\r\n    &lt;system.web&gt;\r\n        &lt;trace localOnly=&quot;false&quot;/&gt;\r\n    &lt;/system.web&gt;\r\n&lt;/configuration&gt;</pre>                      </code>\r\n\r\n                  </td>\r\n               </tr>\r\n            </table>\r\n\r\n            <br>\r\n\r\n            </font>\r\n\r\n    </body>\r\n</html>\r\n",
+      "ip": "103.9.86.150",
+      "timestamp": "2026-06-12T15:30:35.009407895+07:00",
+      "curl-command": "curl -X 'GET' -d '' -H 'Accept: */*' -H 'Accept-Language: en' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Mobile/15E148 Safari/604.1' 'https://mae.gov.vn/Trace.axd'",
+      "matcher-status": true
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ]
+}
