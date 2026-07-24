@@ -1,7 +1,7 @@
-from src.stage_full.ollama_client import goi_Agent
+from src.stage_full.ollama_client import full_model
 from llama_index.core.llms import ChatMessage
 
-llm = goi_Agent()
+llm = full_model()
 
 # Lưu lịch sử hội thoại
 messages = []

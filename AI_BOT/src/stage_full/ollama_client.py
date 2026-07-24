@@ -1,6 +1,6 @@
 from llama_index.llms.ollama import Ollama
 from llama_index.core import Settings
-def goi_Agent():
+def full_model():
 
     llm = Ollama(
         model="my-model", 
@@ -17,4 +17,3 @@ def goi_Agent():
     Settings.llm = llm
     return llm
 
-#fast,medium,full
