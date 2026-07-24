@@ -119,7 +119,7 @@ class TextScraper:
                         tracker_url = declared_vars.get(var_name)
 
                 if site_id and tracker_url:
-                    return 1
+                    return 0
                 # return {
                 #     "has_emc":     True,
                 #     "site_id":     site_id,
@@ -127,7 +127,7 @@ class TextScraper:
                 # }
             except:
                 continue
-        return 0
+        return 1
         # return {
         #     "has_emc":     False,
         #     "site_id":     None,

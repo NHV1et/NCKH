@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from urllib.parse import urlparse
+import urllib.parse
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from web_scraper.text_scraper import TextScraper
@@ -130,14 +131,18 @@ class FeatureScraper:
         domain = self.domain.lower()
 
         if (domain.endswith(".gov.vn")
-            or domain == "gov.vn"
             or domain.endswith(".gov")
             or domain.endswith(".vn")):
             # self.add_feature("has_signature",1)
-            return 1
+            return 0
+        elif (domain.endswith(".com")
+              or domain.endswith(".org")
+              or domain.endswith(".net")
+              or domain.endswith(".edu")):
+            return 2
         else:
             # self.add_feature("has_signature",0)
-            return 0
+            return 1
 
     def has_icon(self):
         try:
@@ -151,10 +156,10 @@ class FeatureScraper:
             icon = soup.find("link", rel="shortcut icon")
             if icon:
                 # self.add_feature('has_icon',1)
-                return 1
+                return 0
             else:
                 # self.add_feature('has_icon',0)
-                return 0
+                return 1
         except:
             print('Hàm check icon bị lỗi, kiểm tra lại')
             return   
@@ -165,18 +170,7 @@ class FeatureScraper:
         #     1 if len(url) <= 40 else 0
         # )
         return 0 if len(self.domain) <= 40 else 1
-    
-    def redirection(self):
-        url='https://'+self.domain
-        pos = url.rfind('//')
-        if pos > 6:
-            if pos > 7:
-                return 1 
-            else:
-                return 0
-        else:
-            return 0
-    
+        
     def httpDomain(self):
         if 'https' in self.domain:
             # self.add_feature("domain_has_https",0)
@@ -217,10 +211,10 @@ class FeatureScraper:
                     keyword in content
                     for keyword in not_indexed_keywords):
                     # self.add_feature("indexed",0)
-                    return 0
+                    return 1
                 else:
                     # self.add_feature("indexed",1)
-                    return 1
+                    return 0
         except Exception as e:
             print("Lỗi tại hàm check index!" + str(e))
             return
@@ -258,9 +252,9 @@ class FeatureScraper:
                     records.append(line)
                     info[type]=records
         if info:
-            return 1
-        else:
             return 0
+        else:
+            return 1
     def domain_info(self):
         response = requests.get(f'https://developers.inet.vn/api/gateway/v1/domain/whois/{self.domain}', headers=self.headers)
         return response.json()['data']
@@ -281,18 +275,79 @@ class FeatureScraper:
             return 1
         else:
             return 0
-    def has_ssl_certificate(self):
+    def trusted_ssl_certificate(self):
         try:
             context = ssl.create_default_context()        
             with socket.create_connection((self.domain, 443)) as sock:
                 with context.wrap_socket(sock, server_hostname=self.domain) as ssock:
                     cert = ssock.getpeercert()
-                    if cert:
-                        return 1
+                    if not cert:
+                        return -1 #Không có ssl
+                    whitelist = [
+                        "GlobalSign",
+                        "DigiCert",
+                        "GeoTrust",
+                        "RapidSSL",
+                        "Sectigo",
+                        "Comodo CA",
+                        "SSL.com",
+                        "GoDaddy",
+                        "Certum",
+                        "Actalis",
+                        "HARICA",
+                        "Amazon Trust Services",
+                        "Google Trust Services",
+                        "Microsoft Azure App Service Certificate",
+                        "Entrust",
+                        "Thawte",
+                        "VeriSign / Symantec legacy",
+                        "IdenTrust",
+                        "SwissSign",
+                        "QuoVadis",
+                        "ChamberSign",
+                        "TrustAsia",
+                        "SECOM Trust Systems",
+                        "TWCA",
+                        "eMudhra",
+                        "Certigna",
+                        "Disig",
+                        "NetLock",
+                        "CertEurope",
+                        "TÜRKTRUST",
+                        "Kamu SM",
+                        "WISeKey",
+                    ]
+                    suslist = [
+                        "Let's Encrypt",
+                        "ZeroSSL",
+                        "SSL For Free",
+                        "Actalis Free Plan",
+                        "Google Trust Services ACME",
+                        "Cloudflare Universal SSL",
+                        "AWS Certificate Manager public certificates",
+                        "Google Cloud Google-managed SSL certificates",
+                        "Azure App Service Managed Certificate",
+                        "Hosting AutoSSL / cPanel AutoSSL",
+                        "GitHub Pages HTTPS",
+                        "Netlify managed HTTPS",
+                        "Vercel managed certificates",
+                        "Firebase Hosting SSL",
+                        "Render managed TLS",
+                        "Railway managed TLS",
+                        "Fly.io managed TLS",
+                        "Heroku Automated Certificate Management",
+                        "Buypass Go SSL",
+                    ]
+                    issuer = dict(x[0] for x in cert['issuer'])
+                    issuer_common_name = issuer.get('commonName', '')
+                    if any(issuer_name in issuer_common_name for issuer_name in whitelist):
+                        return 0 #Nhãn đáng tin cậy
+                    elif any(sus_name in issuer_common_name for sus_name in suslist):
+                        return 2 #Nhãn khả nghi
                     else:
-                        return 0
+                        return 1 #Nhãn không đáng tin 
         except (socket.error, ssl.SSLError, ConnectionError) as e:
-            return 0
+            return 1
     def disabled_right_click(self):
         if 'oncontextmenu="return false"' in self.response.text:
             return 1
@@ -320,6 +375,41 @@ class FeatureScraper:
     def has_nca(self):
         response=requests.get(f'https://tinnhiemmang.vn/handle_cert?id={self.domain}')
         if response.status_code==200:
-            return 1
-        else:
             return 0
+        else:
+            return 1
+    def high_web_rank(self):
+        token="69edd463697344a19227e22d861fc4479f2d53e4b1b"
+        url = f"https://www.similarweb.com/website/{self.domain}/"
+        encoded_url = urllib.parse.quote_plus(url)
+        response=requests.get(f'https://api.scrape.do/?token={token}&url={encoded_url}&super=true')
+        if response.status_code==200:
+            html=response.text
+            soup = BeautifulSoup(html, "html.parser")
+            title_p = soup.find("p", attrs={"data-test": "country-rank"})
+            if title_p:
+                parent_item = title_p.find_parent("div", class_="wa-rank-list__item")
+                value_p = parent_item.find("p", class_="wa-rank-list__value")              
+                if value_p:
+                    rank_text = value_p.get_text(strip=True).replace("#", "")
+                    #print(f"Rank: {rank_text}")
+                    if rank_text <100000:
+                        return 0
+            return 1
+    def high_domain_rating(self):
+        url = "https://api.ahrefs.com/v3/public/domain-rating-free"
+        headers = {
+            "Accept": "application/json",
+            "Authorization": "Bearer uOZjV548u4LBcMPeKR4OoQFuqAN5W5yCdEdB2Nsy"
+        }
+        params = {
+            "target": self.domain,
+            "output": "json"
+        }
+        response = requests.get(url, headers=headers, params=params)
+        if response.status_code==200:
+            data=response.json()
+            score=data['domain_rating']['domain_rating']
+            if score>50:
+                return 0
+            return 1
