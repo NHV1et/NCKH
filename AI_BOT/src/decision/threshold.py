@@ -1,0 +1,1 @@
+#viết các ngưỡng stop cho các model

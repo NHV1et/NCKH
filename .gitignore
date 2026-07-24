@@ -1,0 +1,4 @@
+AI_BOT/stage_full/model/
+*.gguf
+venv/
+__pycache__/
