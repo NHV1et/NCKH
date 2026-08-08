@@ -69,13 +69,19 @@ class ZapScan:
         if not self.zap:
             raise RuntimeError("ZAP client chưa được khởi tạo. Gọi start_zap trước.")
 
-        self.zap.ajaxSpider.scan(target)
-        while self.zap.ajaxSpider.status == "running":
+        self.zap.clientSpider.scan(browser='firefox-headless', url=target) # Khong duoc thi thay lai bang Ajax
+        while self.zap.clientSpider.status == "running":
             print("AJAX Spider đang chạy...")
             time.sleep(2)
 
         return self.zap.core.urls()
 
+    def kill(self):
+        try:
+            self.zap.core.shutdown()
+            time.sleep(3)
+        except Exception as e:
+            print(f'Lỗi khi tắt: {e}')        
     def json_format(self, urls:list):
         return {
             'hidden_endpoint_urls':urls
@@ -97,6 +103,7 @@ if __name__ == '__main__':
     urls = scanner.ajax_scan(TARGET)
     print("AJAX Spider hoàn tất")
     print(f'Test sau khi gọi hàm format xem đã chuẩn chưa: \n {scanner.json_format(urls)}')
+    scanner.kill()
 
     
     
