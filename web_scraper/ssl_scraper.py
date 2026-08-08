@@ -1,17 +1,20 @@
-# from playwright.sync_api import sync_playwright
-# from seleniumbase import sb_cdp
-import socket
+import json
 from sslyze import (
-    Scanner,
-    ServerNetworkLocation,
-    ServerScanRequest,
-    ScanCommand
-)
+            Scanner,
+            ServerNetworkLocation,
+            ServerScanRequest,
+            ScanCommand
+        )
 
+from pathlib import Path
 
-def scan_tls_vulnerabilities(hostname: str):
+class SSL_Scraper():
+    def __init__(self):
+        pass
 
-    request = ServerScanRequest(
+    def scan_tls_vulnerabilities(self,hostname: str):
+        scanner = Scanner()
+        request = ServerScanRequest(
         server_location=ServerNetworkLocation(
             hostname=hostname,
             port=443
@@ -28,101 +31,92 @@ def scan_tls_vulnerabilities(hostname: str):
         }
     )
 
-    scanner = Scanner()
-    scanner.queue_scans([request])
+        scanner.queue_scans([request])
 
-    for result in scanner.get_results():
+        for result in scanner.get_results():
+            print('Kieu du lieu cua robot:', type(result.scan_result
+                                .robot
+                                .result.robot_result.value))
 
-        report = {
-            "host": hostname
-        }
+            print('Kieu du lieu cua css_in',type(result.scan_result
+                                .openssl_ccs_injection
+                                .result.is_vulnerable_to_ccs_injection))
 
-        report["heartbleed"] = (
-            result.scan_result
-                  .heartbleed
-                  .result
-        )
+            print('Kieu du lieu cua tls_com',type(result.scan_result
+                                .tls_compression
+                                .result.supports_compression))
+            print('Kieu du lieu cua fallback_scsv',type( result.scan_result
+                                .tls_fallback_scsv
+                                .result.supports_fallback_scsv))
+            print('Kieu du lieu cua renegotiation',type( result.scan_result
+                                .session_renegotiation
+                                .result.client_renegotiations_success_count))
+            report = {
+                "host": hostname
+            }
 
-        report["robot"] = (
-            result.scan_result
-                  .robot
-                  .result
-        )
+            report["heartbleed"] = (
+                result.scan_result
+                    .heartbleed
+                    .result.is_vulnerable_to_heartbleed
+            )
 
-        report["ccs_injection"] = (
-            result.scan_result
-                  .openssl_ccs_injection
-                  .result
-        )
+            report["robot"] = (
+                result.scan_result
+                    .robot
+                    .result.robot_result.value
+            )
 
-        report["tls_compression"] = (
-            result.scan_result
-                  .tls_compression
-                  .result
-        )
+            report["ccs_injection"] = (
+                result.scan_result
+                    .openssl_ccs_injection
+                    .result.is_vulnerable_to_ccs_injection
+            )
 
-        report["fallback_scsv"] = (
-            result.scan_result
-                  .tls_fallback_scsv
-                  .result
-        )
+            report["tls_compression"] = (
+                result.scan_result
+                    .tls_compression
+                    .result.supports_compression
+            )
 
-        report["renegotiation"] = (
-            result.scan_result
-                  .session_renegotiation
-                  .result
-        )
+            report["fallback_scsv"] = (
+                result.scan_result
+                    .tls_fallback_scsv
+                    .result.supports_fallback_scsv
+            )
 
-        report["extended_master_secret"] = (
-            result.scan_result
-                  .tls_extended_master_secret
-                  .result
-        )
+            report["supports_secure_renegotiation"] = (
+                result.scan_result
+                    .session_renegotiation
+                    .result.supports_secure_renegotiation
+            )
 
-        report["early_data"] = (
-            result.scan_result
-                  .tls_1_3_early_data
-                  .result
-        )
+            report['is_vulnerable_to_client_renegotiation_dos'] = (
+                result.scan_result
+                                    .session_renegotiation
+                                    .result.is_vulnerable_to_client_renegotiation_dos
+            )
 
-        return report
+            report['client_renegotiations_success_count'] = (result.scan_result
+                                                .session_renegotiation
+                                                .result.client_renegotiations_success_count)
 
+            report["extended_master_secret"] = (
+                result.scan_result
+                    .tls_extended_master_secret
+                    .result.supports_ems_extension
+            )
 
-def get_similar_info():
-    with sync_playwright() as p:
-        browser = p.chromium.connect_over_cdp(
-            sb.get_endpoint_url()
-        )
-        context = browser.contexts[0]
-        page = context.pages[0]
-        for name in domains:
-            try:
-                page.goto(f"https://www.similarweb.com/api/website/{name}")
-                print(page.title())
-                print(page.url)
-                print(page.locator("pre").text_content())
-                sb.sleep(3)
-            except Exception as e:
-                print(f"Loi: {e}")
-
-
-def get_ssl_provider(domain):
-    context = ssl.create_default_context()
-
-    with socket.create_connection((domain, 443), timeout=10) as sock:
-        with context.wrap_socket(sock, server_hostname=domain) as ssock:
-            cert = ssock.getpeercert()
-
-    issuer = dict(x[0] for x in cert["issuer"])
-
-    return issuer
-
-
+            report["early_data"] = (
+                result.scan_result
+                    .tls_1_3_early_data
+                    .result.supports_early_data
+            )
+            
+            return report
 
 if __name__ == '__main__':
-    result = scan_tls_vulnerabilities("moet.gov.vn")
-    print(result)
-    # sb = sb_cdp.Chrome()
+    ssl_scanner = SSL_Scraper()
     domains = [
     "mod.gov.vn",
     "bqp.vn",
@@ -179,4 +173,20 @@ if __name__ == '__main__':
     "tayninh.gov.vn",
     "vinhlong.gov.vn"
 ]
+    
+    # print(ssl_scanner.scan_tls_vulnerabilities('danang.gov.vn'))
+    bao_cao = []
+    for domain in city_domain:
+        try:
+            bao_cao.append(ssl_scanner.scan_tls_vulnerabilities(domain))
+        except Exception as e:
+            print('Trong lúc quét, domain', ' ', domain,'bị lỗi:', ' ',e)
+
+    with open(
+                Path(__file__).resolve().parent.parent / "report_json" / f"web_thanh_pho_ssl_vul_report.json",
+                "w",
+                encoding="utf-8"
+            ) as f:
+                json.dump(bao_cao, f, indent=4)
+
     
