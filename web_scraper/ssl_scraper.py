@@ -34,23 +34,6 @@ class SSL_Scraper():
         scanner.queue_scans([request])
 
         for result in scanner.get_results():
-            print('Kieu du lieu cua robot:', type(result.scan_result
-                                .robot
-                                .result.robot_result.value))
-
-            print('Kieu du lieu cua css_in',type(result.scan_result
-                                .openssl_ccs_injection
-                                .result.is_vulnerable_to_ccs_injection))
-
-            print('Kieu du lieu cua tls_com',type(result.scan_result
-                                .tls_compression
-                                .result.supports_compression))
-            print('Kieu du lieu cua fallback_scsv',type( result.scan_result
-                                .tls_fallback_scsv
-                                .result.supports_fallback_scsv))
-            print('Kieu du lieu cua renegotiation',type( result.scan_result
-                                .session_renegotiation
-                                .result.client_renegotiations_success_count))
             report = {
                 "host": hostname
             }
