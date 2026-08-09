@@ -3,8 +3,10 @@ import os
 from datetime import datetime
 from web_scraper.text_scraper import TextScraper
 from web_scraper.img_scraper import ImageScraper
-from web_scraper.nuclei_scraper import NucleiScraper
+from web_scraper.tool_scraper import ToolScraper
 from web_scraper.feature_scraper import FeatureScraper
+from web_scraper.ssl_scraper import SslScraper
+from web_scraper.hidden_endpoints_zap import ZapScan
 class Export:
     def __init__(self,domain):
         self.report = {}
@@ -17,17 +19,24 @@ class Export:
     def get_img(self):
         image_scraper = ImageScraper()
         self.report['Images'] = image_scraper.scanning(self.domain,self.saved_file)
-    def get_nuclei_info(self,tech=True,vuln=True):
-        nuclei_scraper = NucleiScraper(self.domain)
-        nuclei_scraper.scanning(self.report,scan_tech=tech,scan_vuln=vuln)
+    def get_tool_info(self):
+        tool_scraper = ToolScraper(self.domain)
+        ssl_scanner = SslScraper()
+        zap_scanner = ZapScan(api_key='6n0416d5530furf9hee2c6ve5s', port='8080')
+        self.report['technologies']=tool_scraper.whatweb_scan()
+        self.report['waf']=tool_scraper.waf_scan()
+        self.report['cves']=tool_scraper.cve_scan()
+        self.report['hidden_endpoints']=zap_scanner.ajax_scan(self.domain)
+        self.report['ssl_vulnerabilities']=ssl_scanner.scan_tls_vulnerabilities(self.domain)
+        self.report['nikto_vulnerabilities']=tool_scraper.nikto_scan()
+        self.report['wapiti_vulnerabilities']=tool_scraper.wapiti_scan()
+
     def get_feature_info(self,domain=True,ssl=True,port=True,dns=True):
         feature_scraper = FeatureScraper(self.domain)
         feature_scraper.scanning(self.report,scan_domain=domain,scan_ssl=ssl,scan_port=port,scan_dns=dns)
-    def get_deep_features(self,tech=True,vuln=True,domain=True,ssl=True,port=True,dns=True):
-        self.get_Text()
-        #self.get_img()
+    def get_deep_features(self,domain=True,ssl=True,port=True,dns=True):
         self.get_feature_info(domain=domain,ssl=ssl,port=port,dns=dns)        
-        self.get_nuclei_info(tech=tech,vuln=vuln)
+        self.get_tool_info()
     def get_surface_features(self):
         feature_scraper = FeatureScraper(self.domain)
         text_scraper = TextScraper()

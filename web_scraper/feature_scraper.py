@@ -25,7 +25,6 @@ class FeatureScraper:
         self.headers = {
             "Authorization": "Bearer inet_sk_64896d99f0cf1c30ac0b28368cf015703f294d2f001a25e7981834b751e649e9"
         }
-
     def get_Domain_info(self):
         response = requests.get(f'https://developers.inet.vn/api/gateway/v1/domain/whois/{self.domain}', headers=self.headers)
         data = response.json()['data']

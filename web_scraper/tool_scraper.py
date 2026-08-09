@@ -1,9 +1,9 @@
+from datetime import datetime
 import os
 import subprocess
 import tempfile
 import json,time
-from sslyze import Scanner, ServerScanRequest, ServerNetworkLocation,ScanCommand
-class NucleiScraper:
+class ToolScraper:
     def __init__(self, url):
         self.url = url
 #----------------------NUCLEI--------------------------------
@@ -87,7 +87,7 @@ class NucleiScraper:
             return vulns
       except subprocess.CalledProcessError as e:
         return f"[!] Lỗi: {e.stderr}" 
-    def scrape_cve(self):
+    def cve_scan(self):
         try:
             command = [
                 'nuclei',
@@ -121,6 +121,31 @@ class NucleiScraper:
                 return cves
         except subprocess.CalledProcessError as e:
             return f"[!] Lỗi: {e.stderr}"
+    def waf_scan(self):
+        try:
+            command = [
+                'nuclei',
+                '-u', self.url,
+                '-j', '-silent',
+                '-t', 'http/technologies/waf-detect.yaml',
+                '-timeout', '5',
+                '-retries', '0',
+                '-severity', 'info'
+            ]
+            result = subprocess.run(command, capture_output=True, text=True)
+            if result.stdout:
+                wafs={}
+                for line in result.stdout.strip().split('\n'):
+                    if line.strip():
+                        try:
+                            data = json.loads(line)
+                            wafs['waf-name'] = data.get('matcher-name') if data.get('matcher-name') else None
+                        except json.JSONDecodeError:
+                            continue                              
+                return wafs
+            return []
+        except subprocess.CalledProcessError as e:
+            return f"[!] Lỗi: {e.stderr}"
 #------------------------------------------------------------
     def whatweb_scan(self):
         try:
@@ -143,35 +168,75 @@ class NucleiScraper:
         except subprocess.CalledProcessError as e:
             return f"[!] Lỗi: {e.stderr}"
     def nikto_scan(self):
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        safe_host = self.url.replace("http://", "").replace("https://", "").replace("/", "_")
+        saved_file =f"nikto_scan_{safe_host}_{timestamp}"
+
+        command = [
+            'nikto',
+            '-h', self.url,
+            '-Tuning', '123a',
+            '-timeout', '5',
+            '-maxtime', '30',
+            '-Format', 'json',
+            '-output', saved_file
+        ]
+
         try:
-            with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:
-                tmp_path = f.name
-            command = [
-                'nikto',
-                '-h', self.url,
-                '-ssl',
-                '-Tuning', '1234abc',
-                '-timeout', '5',
-                '-maxtime', '60',
-                '-Format', 'json',
-                '-output', tmp_path
-            ]
-            start=time.perf_counter()
-            subprocess.run(command,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            execute_time=time.perf_counter()-start
-            print(f'Thời gian chạy nikto: {execute_time:.6f} giây')
-            try:
-                with open(tmp_path) as f:
-                    data = json.load(f)
-                    return data.get('vulnerabilities', [])  
-            except (json.JSONDecodeError, FileNotFoundError):
-                return []
-            finally:
-                os.unlink(tmp_path)
-        except Exception as e:
-            return f"[!] Lỗi: {str(e)}"
+            subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            saved_file=f"{saved_file}.json"
+            if not os.path.exists(saved_file):
+                return {"error": "Nikto scan returned an empty output file."}
+            
+            with open(saved_file, encoding='utf-8') as f:
+                data = json.load(f)
+            return data[0].get('vulnerabilities', [])
+        except (json.JSONDecodeError, FileNotFoundError) as e:
+            return {"error": f"Unable to parse Nikto output: {e}"}
+        finally:
+            if os.path.exists(saved_file):
+                os.remove(saved_file)
+            return {}
+    def wapiti_scan(self):
+        with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:
+            tmp_path = f.name
+        command = [
+            'wapiti',
+            '-u', self.url,
+            '--scope', 'url',
+            '-m', 'sql,xss,xxe,ssrf,redirect,csrf,brute_login_form',
+            '--max-links-per-page', '50',
+            '--max-files-per-dir', '50',
+            '--depth', '2',
+            '--timeout', '10',
+            '--max-scan-time', '120',
+            '-f', 'json',
+            '-o', tmp_path,
+            '--no-bugreport'
+        ]
+
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        try:
+            with open(tmp_path, encoding='utf-8') as f:
+                data = json.load(f)
+                return data.get('vulnerabilities', {})
+        except (json.JSONDecodeError, FileNotFoundError):
+            return {}
+        finally:
+            os.unlink(tmp_path)
+            return {}
     def scanning(self,report:dict,scan_tech=True,scan_vuln=True):
         if scan_tech:
             report['technologies']=self.scrape_tech()
         if scan_vuln:
             report['vulnerabilities']=self.scrape_vuln()
+
+if __name__ == "__main__":
+    scraper=ToolScraper('https://moit.gov.vn')
+    report={}
+    start=time.perf_counter()
+    report['waf']=scraper.scan_waf()
+    execute_time=time.perf_counter()-start
+    print(f'Thời gian quét waf: {execute_time:.6f} giây')
+    print(json.dumps(report,indent=4,ensure_ascii=False))
