@@ -1,0 +1,24 @@
+[azure-domain-tenant] [http] [info] https://login.microsoftonline.com:443/chinhphu.vn/v2.0/.well-known/openid-configuration ["fbe851a4-2ca1-4d93-8a4f-e20aece01d9a"]
+[waf-detect:securesphere] [http] [info] https://chinhphu.vn
+[rpcbind-portmapper-detect] [tcp] [info] chinhphu.vn:111
+[tls-version] [ssl] [info] chinhphu.vn:443 ["tls12"]
+[tls-version] [ssl] [info] chinhphu.vn:443 ["tls13"]
+[openresty-detect] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:strict-transport-security] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:permissions-policy] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:x-frame-options] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:x-content-type-options] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:x-permitted-cross-domain-policies] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:referrer-policy] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:cross-origin-resource-policy] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:content-security-policy] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:cross-origin-embedder-policy] [http] [info] https://chinhphu.vn
+[http-missing-security-headers:cross-origin-opener-policy] [http] [info] https://chinhphu.vn
+[mx-fingerprint] [dns] [info] chinhphu.vn ["50 mx2.chinhphu.vn.","10 mx1.chinhphu.vn."]
+[caa-fingerprint] [dns] [info] chinhphu.vn
+[spf-record-detect] [dns] [info] chinhphu.vn ["v=spf1 a mx ~all""]
+[txt-fingerprint] [dns] [info] chinhphu.vn [""_globalsign-domain-verification=6DEoKB4q3WiXiqG5ztMC2g-u_RqzoyVTtSoabRTTUu"",""_globalsign-domain-verification=RoAP3WTIt6-eooyS7GF6yaXfXOvZibrAOPsaOcXzOO"",""7+myQMLwooJ3hVPIFN6l+znDEvkKTfvyW+Pau9FMEbM="",""v=spf1 a mx ~all"",""CWWWgzING5/gYbX3LcebinQIg/731LMmbg5rP/Oo1GE="",""_globalsign-domain-verification=8d0nF1Y_0KjDmHZ36Y--SgdP3vmP0NIfITBqVv4djp""]
+[nameserver-fingerprint] [dns] [info] chinhphu.vn ["vdc-hn01.vnn.vn.","hcm-server1.vnn.vn."]
+[ssl-issuer] [ssl] [info] chinhphu.vn:443 ["GlobalSign nv-sa"]
+[ssl-dns-names] [ssl] [info] chinhphu.vn:443 ["chinhphu.vn","*.chinhphu.vn"]
+[wildcard-tls] [ssl] [info] chinhphu.vn:443 ["CN: chinhphu.vn","SAN: [chinhphu.vn *.chinhphu.vn]"]
