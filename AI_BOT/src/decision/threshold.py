@@ -1,1 +1,1 @@
-#viết các ngưỡng stop cho các model
+#tìm ra threshold phù hợp và nhét vào file cấu hình
