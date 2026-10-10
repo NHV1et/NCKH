@@ -1,0 +1,16 @@
+pandas
+PyYAML
+numpy
+scikit-learn
+xgboost
+shap
+openai
+pydantic
+matplotlib
+mcp
+selenium
+sslyze
+requests
+bs4
+playwright
+zaproxy

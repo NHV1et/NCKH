@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import json
 
@@ -40,6 +39,20 @@ FEATURE_COLUMNS = [
 
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "model" / "full_model.json"
+PROJECT_DIR = BASE_DIR.parent
+
+
+def find_latest_report() -> Path:
+    """Tìm report.json mới nhất trong các thư mục scrap_*."""
+    reports = list(PROJECT_DIR.glob("scrap_*/report.json"))
+
+    if not reports:
+        raise FileNotFoundError(
+            f"Không tìm thấy report.json trong {PROJECT_DIR}"
+        )
+
+    return max(reports, key=lambda path: path.stat().st_mtime)
+
 
 model = XGBClassifier()
 model.load_model(str(MODEL_PATH))
@@ -130,9 +143,10 @@ def predict(features: dict) -> DetectionResult:
 
     return result
 
-
 if __name__ == "__main__":
-    JSON_PATH = (BASE_DIR.parent / "report.json").resolve()
+    JSON_PATH = find_latest_report()
+
+    print(f"Đang đọc báo cáo: {JSON_PATH}")
 
     with open(JSON_PATH, "r", encoding="utf-8") as f:
         features = json.load(f)
@@ -151,3 +165,4 @@ if __name__ == "__main__":
     print(result.explanation)
 
     print("=" * 60)
+
