@@ -1,0 +1,8 @@
+{
+    "low": 0.27,
+    "high": 0.93,
+    "target_recall": 0.95,
+    "target_precision": 0.95,
+    "recall_target_met": true,
+    "precision_target_met": true
+}

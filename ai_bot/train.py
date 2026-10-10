@@ -1,13 +1,9 @@
 from pathlib import Path
 import sys
 import logging
-
 import yaml
 from xgboost import XGBClassifier
-
 from ai_bot.dataset_loader import load_dataset
-
-import sys
 import os
 
 os.environ["PYTHONUTF8"] = "1"

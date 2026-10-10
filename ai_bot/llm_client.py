@@ -89,17 +89,30 @@ def explain_result(result):
         feature_lines.append(
             f"- {item.feature}: "
             f"giá trị={item.value}, "
-            f"SHAP={item.impact:.4f}"
+            f"SHAP={item.impact:.4f}" 
         )
 
     feature_text = "\n".join(feature_lines)
 
+    
     if result.label == "phishing":
-        conclusion = "Mô hình phân loại website là phishing."
+        conclusion = (
+            "Mô hình phân loại website là phishing, "
+            "có mức rủi ro cao theo ngưỡng đã cấu hình."
+        )
+    elif result.label == "suspicious":
+        conclusion = (
+            "Mô hình phân loại website là suspicious, "
+            "cần kiểm tra thêm trước khi kết luận."
+        )
     elif result.label == "real":
-        conclusion = "Mô hình phân loại website là real."
+        conclusion = (
+            "Mô hình phân loại website là real, "
+            "có mức rủi ro thấp theo ngưỡng đã cấu hình."
+        )
     else:
         conclusion = f"Mô hình trả về nhãn {result.label}."
+
 
     prompt = f"""
 Bạn là thành phần giải thích kết quả của hệ thống phát hiện

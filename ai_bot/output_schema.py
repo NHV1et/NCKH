@@ -42,7 +42,7 @@ class DetectionResult(BaseModel):
         description="Độ tin cậy theo quy ước của hệ thống, từ 0 đến 1"
     )
 
-    label: Literal["real", "phishing"] = Field(
+    label: Literal["real", "suspicious", "phishing"] = Field(
         ...,
         description="Nhãn dự đoán của model"
     )

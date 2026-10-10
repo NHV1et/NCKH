@@ -1,13 +1,15 @@
+
 from pathlib import Path
 import json
+
 import pandas as pd
 from xgboost import XGBClassifier
 
 from ai_bot.output_schema import DetectionResult
 from ai_bot.explain import explain_prediction
 from ai_bot.llm_client import explain_result
-from ai_bot.threshold import load_threshold
-from ai_bot.threshold import classify_probability
+from ai_bot.threshold import load_thresholds, classify_probability
+
 
 FEATURE_COLUMNS = [
     "has_ip_address_in_url",
@@ -67,12 +69,26 @@ def predict(features: dict) -> DetectionResult:
 
     probabilities = model.predict_proba(df)[0]
 
-    # Giả định: 0 = real, 1 = fake
-    fake_probability = float(probabilities[1])
+    # Xác định đúng vị trí xác suất lớp phishing.
+    classes = list(model.classes_)
 
-    threshold = load_threshold()
+    if 1 not in classes:
+        raise ValueError(
+            f"Model không có lớp phishing (1). Các lớp: {classes}"
+        )
 
-    label = classify_probability(fake_probability)
+    phishing_index = classes.index(1)
+    fake_probability = float(probabilities[phishing_index])
+
+    # Đọc hai ngưỡng từ config.yaml.
+    low_threshold, high_threshold = load_thresholds()
+
+    # Phân loại thành real / suspicious / phishing.
+    label = classify_probability(
+        fake_probability,
+        low_threshold=low_threshold,
+        high_threshold=high_threshold,
+    )
 
     feature_impacts = explain_prediction(
         model,
@@ -93,7 +109,6 @@ def predict(features: dict) -> DetectionResult:
                 f"{item.feature} góp phần giảm nguy cơ phishing"
             )
 
-    
     result = DetectionResult(
         score=round(fake_probability * 100),
         confidence=float(max(probabilities)),
@@ -115,6 +130,7 @@ def predict(features: dict) -> DetectionResult:
 
     return result
 
+
 if __name__ == "__main__":
     JSON_PATH = (BASE_DIR.parent / "report.json").resolve()
 
@@ -129,7 +145,7 @@ if __name__ == "__main__":
 
     print(f"Label       : {result.label}")
     print(f"Risk Score  : {result.score}/100")
-    print(f"Confidence  : {result.confidence:.2f}")
+    print(f"Confidence  : {result.confidence:.4f}")
 
     print("\nGIẢI THÍCH:")
     print(result.explanation)
