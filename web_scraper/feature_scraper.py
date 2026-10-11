@@ -394,7 +394,7 @@ class FeatureScraper:
                 if value_p:
                     rank_text = value_p.get_text(strip=True).replace("#", "")
                     #print(f"Rank: {rank_text}")
-                    if int(rank_text) <100000:
+                    if int(rank_text.replace(',','')) <100000:
                         return 0
             return 1
     def high_domain_rating(self):
@@ -415,7 +415,7 @@ class FeatureScraper:
                 return 0
             return 1
 if __name__=="__main__":
-    domain = "chinhphu.vn"
+    domain = "mae.gov.vn"
     scraper = FeatureScraper(domain)
     scraper.high_web_rank()
     
