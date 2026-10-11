@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 import urllib.parse
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-from web_scraper.text_scraper import TextScraper
+#from web_scraper.text_scraper import TextScraper
 import ipaddress
 import subprocess
 import re
@@ -379,9 +379,11 @@ class FeatureScraper:
             return 1
     def high_web_rank(self):
         token="69edd463697344a19227e22d861fc4479f2d53e4b1b"
+        alt="bdb0e16c93e44d42a7842acb5db70216196495179b0"
         url = f"https://www.similarweb.com/website/{self.domain}/"
         encoded_url = urllib.parse.quote_plus(url)
-        response=requests.get(f'https://api.scrape.do/?token={token}&url={encoded_url}&super=true')
+        response=requests.get(f'https://api.scrape.do/?token={alt}&url={encoded_url}&super=true')
+        print(response.status_code)
         if response.status_code==200:
             html=response.text
             soup = BeautifulSoup(html, "html.parser")
@@ -392,7 +394,7 @@ class FeatureScraper:
                 if value_p:
                     rank_text = value_p.get_text(strip=True).replace("#", "")
                     #print(f"Rank: {rank_text}")
-                    if rank_text <100000:
+                    if int(rank_text) <100000:
                         return 0
             return 1
     def high_domain_rating(self):
@@ -412,3 +414,8 @@ class FeatureScraper:
             if score>50:
                 return 0
             return 1
+if __name__=="__main__":
+    domain = "chinhphu.vn"
+    scraper = FeatureScraper(domain)
+    scraper.high_web_rank()
+    
